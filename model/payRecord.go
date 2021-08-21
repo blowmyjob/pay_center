@@ -1,8 +1,8 @@
 package model
 
-type payRecord struct {
+type PayRecord struct {
 	Id         int64   `gorm:"id"`
-	SeqId      string  `gorm:"seq_id"`
+	SeqId      int64   `gorm:"seq_id"`
 	AppId      string  `gorm:"app_id"`
 	ProductId  int64   `gorm:"product_id"`
 	UserId     int64   `gorm:"user_id"`

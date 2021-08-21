@@ -1,6 +1,6 @@
 package model
 
-type payAccount struct {
+type PayAccount struct {
 	Id         int64   `gorm:"id"`
 	AppId      string  `gorm:"app_id"`
 	Amount     float64 `gorm:"amount"`

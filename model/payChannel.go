@@ -1,6 +1,6 @@
 package model
 
-type payChannel struct {
+type PayChannel struct {
 	Id         int64  `gorm:"id"`
 	PayName    string `gorm:"pay_name"`
 	PayCode    string `gorm:"pay_code"`
