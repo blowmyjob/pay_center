@@ -5,3 +5,5 @@
    level = "panic"
    maxIdleConns = 50
    maxOpenConns = 100
+[jupiter.server.http]
+   port = 9090

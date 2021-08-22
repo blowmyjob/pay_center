@@ -20,9 +20,17 @@ func (payService *PayService) insertPayOrder(u model.PayRecord) (reqNo int64, er
 }
 
 func (payService *PayService) updateOrderStatus(id int64, status string) bool {
-	err := config.GVA_DB.Table("payRecord").Where("id=?", id).Update("status", status).Error
-	if err != nil {
+	total := 0
+	config.GVA_DB.Table("payRecord").Select("count(*) as total").Count(&total)
+	if total == 0 {
 		return false
 	}
+	tx := config.GVA_DB.Begin()
+	err := tx.Table("payRecord").Where("id=?", id).Update("status", status).Error
+	if err != nil {
+		tx.Callback()
+		return false
+	}
+	tx.Commit()
 	return true
 }
