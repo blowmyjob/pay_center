@@ -11,6 +11,7 @@ create table pay_record(
     id bigint comment '' primary key auto_increment,
     seq_id varchar(200) not null comment '支付记录流水号',
     app_id varchar(200) not null comment 'app_id',
+    third_id varchar(200) not null commit '第三方支付流水号',
     product_id bigint not null comment '支付产品id',
     user_id bigint not null comment '支付用户id',
     pay_amount decimal not null comment '支付金额',
