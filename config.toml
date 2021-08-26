@@ -7,3 +7,9 @@
    maxOpenConns = 100
 [jupiter.server.http]
    port = 9090
+[jupiter.server.grpc]
+   port = 9091  # 服务端grpc绑定端口
+[jupiter.registry.wh]
+   connectTimeout = "1s"
+   endpoints=["127.0.0.1:2379"]
+   secure = false
