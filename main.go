@@ -8,8 +8,8 @@ import (
 	"github.com/douyu/jupiter/pkg/server/xgrpc"
 	"github.com/douyu/jupiter/pkg/xlog"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/net/context"
-	"google.golang.org/grpc/examples/helloworld/helloworld"
+	rpc_proto "pay_center/rpc/proto"
+	rpc_service "pay_center/rpc/service"
 )
 
 func main() {
@@ -49,18 +49,8 @@ func (eng *Engine) serveHTTP() error {
 
 func (eng *Engine) serveGRPC() error {
 	server := xgrpc.StdConfig("grpc").Build()
-	helloworld.RegisterGreeterServer(server.Server, &Greeter{
-		server: server,
+	rpc_proto.RegisterPayServiceServer(server.Server, &rpc_service.PayServer{
+		Server: server,
 	})
 	return eng.Serve(server)
-}
-
-type Greeter struct {
-	server *xgrpc.Server
-}
-
-func (g Greeter) SayHello(context context.Context, request *helloworld.HelloRequest) (*helloworld.HelloReply, error) {
-	return &helloworld.HelloReply{
-		Message: "Hello Jupiter, I'm " + g.server.Address(),
-	}, nil
 }
