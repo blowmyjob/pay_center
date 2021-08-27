@@ -11,7 +11,7 @@ var IdWorker = new(utils.IdWorker)
 type PayService struct {
 }
 
-func (payService *PayService) insertPayOrder(u model.PayRecord) (reqNo int64, err error) {
+func (payService *PayService) InsertPayOrder(u model.PayRecord) (reqNo int64, err error) {
 	id, _ := IdWorker.NextId()
 	u.Id = id
 	u.SeqId = id
@@ -19,7 +19,7 @@ func (payService *PayService) insertPayOrder(u model.PayRecord) (reqNo int64, er
 	return id, err
 }
 
-func (payService *PayService) updateOrderStatus(id int64, status string) bool {
+func (payService *PayService) UpdateOrderStatus(id int64, status string) bool {
 	total := 0
 	config.GVA_DB.Table("pay_record").Select("count(*) as total").Count(&total)
 	if total == 0 {
@@ -33,4 +33,8 @@ func (payService *PayService) updateOrderStatus(id int64, status string) bool {
 	}
 	tx.Commit()
 	return true
+}
+
+func (payService *PayService) SelectPayRecord(id int64) model.PayRecord {
+	return model.PayRecord{}
 }
