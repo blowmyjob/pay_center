@@ -4,6 +4,7 @@ import (
 	"pay_center/config"
 	"pay_center/model"
 	"pay_center/utils"
+	"time"
 )
 
 var IdWorker = new(utils.IdWorker)
@@ -15,6 +16,8 @@ func (payService *PayService) InsertPayOrder(u model.PayRecord) (reqNo int64, er
 	id, _ := IdWorker.NextId()
 	u.Id = id
 	u.SeqId = id
+	u.CreateTime = time.Now()
+	u.UpdateTime = time.Now()
 	err = config.GVA_DB.Table("pay_record").Create(&u).Error
 	return id, err
 }
@@ -36,5 +39,7 @@ func (payService *PayService) UpdateOrderStatus(id int64, status string) bool {
 }
 
 func (payService *PayService) SelectPayRecord(id int64) model.PayRecord {
-	return model.PayRecord{}
+	var payRecord model.PayRecord
+	config.GVA_DB.Table("pay_record").Where("id", id).Model(&payRecord)
+	return payRecord
 }

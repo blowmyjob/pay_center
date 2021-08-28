@@ -1,4 +1,4 @@
-package init
+package initConfig
 
 import (
 	"github.com/douyu/jupiter/pkg/store/gorm"

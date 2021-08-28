@@ -2,21 +2,25 @@ package main
 
 import (
 	"github.com/douyu/jupiter"
-	compound_registry "github.com/douyu/jupiter/pkg/registry/compound"
-	"github.com/douyu/jupiter/pkg/registry/etcdv3"
+	//compound_registry "github.com/douyu/jupiter/pkg/registry/compound"
+	//"github.com/douyu/jupiter/pkg/registry/etcdv3"
 	"github.com/douyu/jupiter/pkg/server/xgin"
 	"github.com/douyu/jupiter/pkg/server/xgrpc"
 	"github.com/douyu/jupiter/pkg/xlog"
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc/reflection"
+	"pay_center/config"
+	"pay_center/initConfig"
 	rpc_proto "pay_center/rpc/proto"
 	rpc_service "pay_center/rpc/service"
 )
 
 func main() {
 	eng := NewEngine()
-	eng.SetRegistry(compound_registry.New(
-		etcdv3.StdConfig("wh").Build(),
-	))
+	config.GVA_DB = initConfig.GormMysql("test")
+	//eng.SetRegistry(compound_registry.New(
+	//	etcdv3.StdConfig("wh").Build(),
+	//))
 	if err := eng.Run(); err != nil {
 		xlog.Panic(err.Error())
 	}
@@ -49,6 +53,7 @@ func (eng *Engine) serveHTTP() error {
 
 func (eng *Engine) serveGRPC() error {
 	server := xgrpc.StdConfig("grpc").Build()
+	reflection.Register(server.Server)
 	rpc_proto.RegisterPayServiceServer(server.Server, &rpc_service.PayServer{
 		Server: server,
 	})
