@@ -26,5 +26,10 @@ message PayRecordSelectReq{
 }
 
 message PayRecordSelectResp{
-
+  string appId = 1;
+  int64  productId = 2;
+  int64  userId = 3;
+  string  payAmount = 4;
+  string payMethod = 5;
+  string appPayId = 6;
 }

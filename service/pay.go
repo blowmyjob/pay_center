@@ -38,8 +38,8 @@ func (payService *PayService) UpdateOrderStatus(id int64, status string) bool {
 	return true
 }
 
-func (payService *PayService) SelectPayRecord(id int64) model.PayRecord {
+func (payService *PayService) SelectPayRecord(id int64) (model.PayRecord, error) {
 	var payRecord model.PayRecord
-	config.GVA_DB.Table("pay_record").Where("id", id).Model(&payRecord)
-	return payRecord
+	err := config.GVA_DB.Table("pay_record").Where("id=?", id).First(&payRecord).Error
+	return payRecord, err
 }
