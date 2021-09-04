@@ -43,3 +43,9 @@ func (payService *PayService) SelectPayRecord(id int64) (model.PayRecord, error)
 	err := config.GVA_DB.Table("pay_record").Where("id=?", id).First(&payRecord).Error
 	return payRecord, err
 }
+
+func (payService *PayService) selectPayRecordByStatusAndId(id int64, status string) (model.PayRecord, error) {
+	var payRecord model.PayRecord
+	err := config.GVA_DB.Table("pay_record").Where("id=? and status = ?", id, status).First(&payRecord).Error
+	return payRecord, err
+}

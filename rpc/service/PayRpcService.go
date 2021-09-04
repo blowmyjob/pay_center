@@ -24,6 +24,7 @@ func (PayServer PayServer) CreatePayRecord(context context.Context, request *rpc
 		PayMethod: request.PayMethod,
 	}
 	reqNo, err := payService.InsertPayOrder(payRecord)
+	//todo 支付渠道网关补充
 	return &rpc_proto.PayRecordCreateResp{
 		SeqNo: reqNo,
 	}, err
@@ -43,4 +44,17 @@ func (PayServer PayServer) SelectPayRecord(context context.Context, request *rpc
 		AppPayId:  payRecord.AppId,
 	}
 	return resp, err
+}
+
+func (PayServer PayServer) refund(context context.Context, request *rpc_proto.RefundReq) (resp *rpc_proto.RefundResp, err error) {
+	payRecord, err := payService.SelectPayRecord(request.OrderId)
+	if err != nil {
+		return nil, err
+	}
+	if &payRecord == nil {
+		return nil, err
+	}
+	//退款操作完之后修改状态
+	payService.UpdateOrderStatus(request.OrderId, "")
+	return resp, nil
 }

@@ -26,6 +26,37 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type PayRecordSelectResp_PayStatus int32
+
+const (
+	PayRecordSelectResp_finish  PayRecordSelectResp_PayStatus = 0
+	PayRecordSelectResp_cancel  PayRecordSelectResp_PayStatus = 1
+	PayRecordSelectResp_timeout PayRecordSelectResp_PayStatus = 2
+	PayRecordSelectResp_refund  PayRecordSelectResp_PayStatus = 3
+)
+
+var PayRecordSelectResp_PayStatus_name = map[int32]string{
+	0: "finish",
+	1: "cancel",
+	2: "timeout",
+	3: "refund",
+}
+
+var PayRecordSelectResp_PayStatus_value = map[string]int32{
+	"finish":  0,
+	"cancel":  1,
+	"timeout": 2,
+	"refund":  3,
+}
+
+func (x PayRecordSelectResp_PayStatus) String() string {
+	return proto.EnumName(PayRecordSelectResp_PayStatus_name, int32(x))
+}
+
+func (PayRecordSelectResp_PayStatus) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_9069421e92eda4b8, []int{3, 0}
+}
+
 type PayRecordCreateReq struct {
 	AppId                string   `protobuf:"bytes,1,opt,name=appId,proto3" json:"appId,omitempty"`
 	ProductId            int64    `protobuf:"varint,2,opt,name=productId,proto3" json:"productId,omitempty"`
@@ -184,15 +215,16 @@ func (m *PayRecordSelectReq) GetSeqNo() int64 {
 }
 
 type PayRecordSelectResp struct {
-	AppId                string   `protobuf:"bytes,1,opt,name=appId,proto3" json:"appId,omitempty"`
-	ProductId            int64    `protobuf:"varint,2,opt,name=productId,proto3" json:"productId,omitempty"`
-	UserId               int64    `protobuf:"varint,3,opt,name=userId,proto3" json:"userId,omitempty"`
-	PayAmount            string   `protobuf:"bytes,4,opt,name=payAmount,proto3" json:"payAmount,omitempty"`
-	PayMethod            string   `protobuf:"bytes,5,opt,name=payMethod,proto3" json:"payMethod,omitempty"`
-	AppPayId             string   `protobuf:"bytes,6,opt,name=appPayId,proto3" json:"appPayId,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	AppId                string                        `protobuf:"bytes,1,opt,name=appId,proto3" json:"appId,omitempty"`
+	ProductId            int64                         `protobuf:"varint,2,opt,name=productId,proto3" json:"productId,omitempty"`
+	UserId               int64                         `protobuf:"varint,3,opt,name=userId,proto3" json:"userId,omitempty"`
+	PayAmount            string                        `protobuf:"bytes,4,opt,name=payAmount,proto3" json:"payAmount,omitempty"`
+	PayMethod            string                        `protobuf:"bytes,5,opt,name=payMethod,proto3" json:"payMethod,omitempty"`
+	AppPayId             string                        `protobuf:"bytes,6,opt,name=appPayId,proto3" json:"appPayId,omitempty"`
+	PayStatus            PayRecordSelectResp_PayStatus `protobuf:"varint,7,opt,name=payStatus,proto3,enum=rpc.proto.PayRecordSelectResp_PayStatus" json:"payStatus,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
+	XXX_unrecognized     []byte                        `json:"-"`
+	XXX_sizecache        int32                         `json:"-"`
 }
 
 func (m *PayRecordSelectResp) Reset()         { *m = PayRecordSelectResp{} }
@@ -262,35 +294,221 @@ func (m *PayRecordSelectResp) GetAppPayId() string {
 	return ""
 }
 
+func (m *PayRecordSelectResp) GetPayStatus() PayRecordSelectResp_PayStatus {
+	if m != nil {
+		return m.PayStatus
+	}
+	return PayRecordSelectResp_finish
+}
+
+type RefundReq struct {
+	AppId                string   `protobuf:"bytes,1,opt,name=appId,proto3" json:"appId,omitempty"`
+	UserId               int64    `protobuf:"varint,2,opt,name=userId,proto3" json:"userId,omitempty"`
+	OrderId              int64    `protobuf:"varint,3,opt,name=orderId,proto3" json:"orderId,omitempty"`
+	RefundAmount         string   `protobuf:"bytes,4,opt,name=refundAmount,proto3" json:"refundAmount,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *RefundReq) Reset()         { *m = RefundReq{} }
+func (m *RefundReq) String() string { return proto.CompactTextString(m) }
+func (*RefundReq) ProtoMessage()    {}
+func (*RefundReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9069421e92eda4b8, []int{4}
+}
+
+func (m *RefundReq) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RefundReq.Unmarshal(m, b)
+}
+func (m *RefundReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RefundReq.Marshal(b, m, deterministic)
+}
+func (m *RefundReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RefundReq.Merge(m, src)
+}
+func (m *RefundReq) XXX_Size() int {
+	return xxx_messageInfo_RefundReq.Size(m)
+}
+func (m *RefundReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_RefundReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RefundReq proto.InternalMessageInfo
+
+func (m *RefundReq) GetAppId() string {
+	if m != nil {
+		return m.AppId
+	}
+	return ""
+}
+
+func (m *RefundReq) GetUserId() int64 {
+	if m != nil {
+		return m.UserId
+	}
+	return 0
+}
+
+func (m *RefundReq) GetOrderId() int64 {
+	if m != nil {
+		return m.OrderId
+	}
+	return 0
+}
+
+func (m *RefundReq) GetRefundAmount() string {
+	if m != nil {
+		return m.RefundAmount
+	}
+	return ""
+}
+
+type RefundResp struct {
+	RefundId             string   `protobuf:"bytes,4,opt,name=refundId,proto3" json:"refundId,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *RefundResp) Reset()         { *m = RefundResp{} }
+func (m *RefundResp) String() string { return proto.CompactTextString(m) }
+func (*RefundResp) ProtoMessage()    {}
+func (*RefundResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9069421e92eda4b8, []int{5}
+}
+
+func (m *RefundResp) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RefundResp.Unmarshal(m, b)
+}
+func (m *RefundResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RefundResp.Marshal(b, m, deterministic)
+}
+func (m *RefundResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RefundResp.Merge(m, src)
+}
+func (m *RefundResp) XXX_Size() int {
+	return xxx_messageInfo_RefundResp.Size(m)
+}
+func (m *RefundResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_RefundResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RefundResp proto.InternalMessageInfo
+
+func (m *RefundResp) GetRefundId() string {
+	if m != nil {
+		return m.RefundId
+	}
+	return ""
+}
+
+type ReverseReq struct {
+	AppId                string   `protobuf:"bytes,1,opt,name=appId,proto3" json:"appId,omitempty"`
+	UserId               int64    `protobuf:"varint,2,opt,name=userId,proto3" json:"userId,omitempty"`
+	OrderId              int64    `protobuf:"varint,3,opt,name=orderId,proto3" json:"orderId,omitempty"`
+	RefundAmount         string   `protobuf:"bytes,4,opt,name=refundAmount,proto3" json:"refundAmount,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ReverseReq) Reset()         { *m = ReverseReq{} }
+func (m *ReverseReq) String() string { return proto.CompactTextString(m) }
+func (*ReverseReq) ProtoMessage()    {}
+func (*ReverseReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9069421e92eda4b8, []int{6}
+}
+
+func (m *ReverseReq) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ReverseReq.Unmarshal(m, b)
+}
+func (m *ReverseReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ReverseReq.Marshal(b, m, deterministic)
+}
+func (m *ReverseReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReverseReq.Merge(m, src)
+}
+func (m *ReverseReq) XXX_Size() int {
+	return xxx_messageInfo_ReverseReq.Size(m)
+}
+func (m *ReverseReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReverseReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReverseReq proto.InternalMessageInfo
+
+func (m *ReverseReq) GetAppId() string {
+	if m != nil {
+		return m.AppId
+	}
+	return ""
+}
+
+func (m *ReverseReq) GetUserId() int64 {
+	if m != nil {
+		return m.UserId
+	}
+	return 0
+}
+
+func (m *ReverseReq) GetOrderId() int64 {
+	if m != nil {
+		return m.OrderId
+	}
+	return 0
+}
+
+func (m *ReverseReq) GetRefundAmount() string {
+	if m != nil {
+		return m.RefundAmount
+	}
+	return ""
+}
+
 func init() {
+	proto.RegisterEnum("rpc.proto.PayRecordSelectResp_PayStatus", PayRecordSelectResp_PayStatus_name, PayRecordSelectResp_PayStatus_value)
 	proto.RegisterType((*PayRecordCreateReq)(nil), "rpc.proto.PayRecordCreateReq")
 	proto.RegisterType((*PayRecordCreateResp)(nil), "rpc.proto.PayRecordCreateResp")
 	proto.RegisterType((*PayRecordSelectReq)(nil), "rpc.proto.PayRecordSelectReq")
 	proto.RegisterType((*PayRecordSelectResp)(nil), "rpc.proto.PayRecordSelectResp")
+	proto.RegisterType((*RefundReq)(nil), "rpc.proto.RefundReq")
+	proto.RegisterType((*RefundResp)(nil), "rpc.proto.RefundResp")
+	proto.RegisterType((*ReverseReq)(nil), "rpc.proto.ReverseReq")
 }
 
 func init() { proto.RegisterFile("Pay.proto", fileDescriptor_9069421e92eda4b8) }
 
 var fileDescriptor_9069421e92eda4b8 = []byte{
-	// 279 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x91, 0xc1, 0x4a, 0xfc, 0x30,
-	0x10, 0xc6, 0x37, 0xdb, 0xff, 0x96, 0x7f, 0xe7, 0x22, 0x44, 0x91, 0xb0, 0xa8, 0x94, 0x9c, 0x8a,
-	0x42, 0x0f, 0xfa, 0x04, 0xe2, 0xa9, 0x07, 0xa5, 0x64, 0x9f, 0x20, 0x26, 0x03, 0x0a, 0x6a, 0xb2,
-	0x69, 0x2a, 0xe4, 0xbd, 0x3c, 0xe8, 0xdb, 0xc9, 0x26, 0xb5, 0x5d, 0xd8, 0x45, 0x2f, 0x7a, 0xeb,
-	0x37, 0xdf, 0xf4, 0xcb, 0xcc, 0x6f, 0xa0, 0x68, 0x65, 0xa8, 0xad, 0x33, 0xde, 0xd0, 0xc2, 0x59,
-	0x95, 0x3e, 0xf9, 0x3b, 0x01, 0xda, 0xca, 0x20, 0x50, 0x19, 0xa7, 0x6f, 0x1c, 0x4a, 0x8f, 0x02,
-	0xd7, 0xf4, 0x08, 0x16, 0xd2, 0xda, 0x46, 0x33, 0x52, 0x92, 0xaa, 0x10, 0x49, 0xd0, 0x13, 0x28,
-	0xac, 0x33, 0xba, 0x57, 0xbe, 0xd1, 0x6c, 0x5e, 0x92, 0x2a, 0x13, 0x53, 0x81, 0x1e, 0x43, 0xde,
-	0x77, 0xe8, 0x1a, 0xcd, 0xb2, 0x68, 0x0d, 0x2a, 0xfe, 0x25, 0xc3, 0xf5, 0xb3, 0xe9, 0x5f, 0x3c,
-	0xfb, 0x57, 0x92, 0x6a, 0x2e, 0xa6, 0xc2, 0xe0, 0xde, 0xa2, 0x7f, 0x30, 0x9a, 0x2d, 0xe2, 0x6b,
-	0x53, 0x81, 0x2e, 0xe1, 0xbf, 0xb4, 0xb6, 0x95, 0xa1, 0xd1, 0x2c, 0x8f, 0xe6, 0xa8, 0xf9, 0x05,
-	0x1c, 0xee, 0x4c, 0xde, 0xd9, 0xcd, 0xe8, 0x1d, 0xae, 0xef, 0x4c, 0x1c, 0x3d, 0x13, 0x49, 0xf0,
-	0xf3, 0xad, 0x35, 0x57, 0xf8, 0x84, 0xca, 0x0f, 0x6b, 0xee, 0xe9, 0xfd, 0x20, 0x5b, 0xc9, 0x5f,
-	0xcd, 0x29, 0xf9, 0xef, 0xa0, 0x14, 0xbf, 0x02, 0xe5, 0xf2, 0x8d, 0x00, 0xb4, 0x32, 0xac, 0xd0,
-	0xbd, 0x3e, 0x2a, 0xa4, 0x02, 0x0e, 0x12, 0x9a, 0x71, 0x1f, 0x7a, 0x5a, 0x8f, 0xd7, 0xaf, 0x77,
-	0x2f, 0xbf, 0x3c, 0xfb, 0xce, 0xee, 0x2c, 0x9f, 0x6d, 0x32, 0x13, 0x94, 0x1f, 0x32, 0x47, 0xcc,
-	0xfb, 0x33, 0x27, 0xb0, 0x7c, 0x76, 0x9f, 0x47, 0xf3, 0xea, 0x33, 0x00, 0x00, 0xff, 0xff, 0x2d,
-	0x5c, 0x22, 0x07, 0xa5, 0x02, 0x00, 0x00,
+	// 434 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x53, 0xc1, 0x8e, 0xd3, 0x30,
+	0x10, 0x6d, 0x52, 0xb6, 0x25, 0x03, 0x82, 0xca, 0x2c, 0xc8, 0xaa, 0x00, 0x55, 0x3e, 0x45, 0x20,
+	0xf5, 0xb0, 0xdc, 0xd0, 0x5e, 0x10, 0x12, 0x52, 0x0e, 0xa0, 0xca, 0xfb, 0x05, 0x26, 0x9e, 0xd5,
+	0x56, 0xda, 0xad, 0xbd, 0xb6, 0xb3, 0x90, 0x9f, 0xe2, 0xcc, 0x8d, 0x5f, 0x43, 0xb6, 0x1b, 0xa7,
+	0x11, 0x29, 0x5c, 0x80, 0x9b, 0xe7, 0xcd, 0x9b, 0xf1, 0xf8, 0xbd, 0x31, 0x14, 0x1b, 0xd1, 0xae,
+	0xb5, 0x51, 0x4e, 0x91, 0xc2, 0xe8, 0x3a, 0x1e, 0xd9, 0xf7, 0x0c, 0xc8, 0x46, 0xb4, 0x1c, 0x6b,
+	0x65, 0xe4, 0x7b, 0x83, 0xc2, 0x21, 0xc7, 0x5b, 0x72, 0x0a, 0x27, 0x42, 0xeb, 0x4a, 0xd2, 0x6c,
+	0x95, 0x95, 0x05, 0x8f, 0x01, 0x79, 0x0e, 0x85, 0x36, 0x4a, 0x36, 0xb5, 0xab, 0x24, 0xcd, 0x57,
+	0x59, 0x39, 0xe5, 0x3d, 0x40, 0x9e, 0xc1, 0xac, 0xb1, 0x68, 0x2a, 0x49, 0xa7, 0x21, 0xb5, 0x8f,
+	0x42, 0x95, 0x68, 0xdf, 0xdd, 0xa8, 0x66, 0xe7, 0xe8, 0xbd, 0x55, 0x56, 0xe6, 0xbc, 0x07, 0xf6,
+	0xd9, 0x8f, 0xe8, 0xae, 0x94, 0xa4, 0x27, 0xe1, 0xb6, 0x1e, 0x20, 0x4b, 0xb8, 0x2f, 0xb4, 0xde,
+	0x88, 0xb6, 0x92, 0x74, 0x16, 0x92, 0x29, 0x66, 0xaf, 0xe1, 0xc9, 0x2f, 0x93, 0x5b, 0xed, 0x47,
+	0xb7, 0x78, 0xfb, 0x49, 0x85, 0xd1, 0xa7, 0x3c, 0x06, 0xec, 0xd5, 0xc1, 0x33, 0x2f, 0xf0, 0x1a,
+	0x6b, 0xb7, 0x7f, 0xe6, 0x08, 0xf7, 0x47, 0x7e, 0xd0, 0xb9, 0x23, 0xc7, 0xce, 0xff, 0x4e, 0x94,
+	0xe2, 0xaf, 0x88, 0x42, 0x3e, 0x84, 0xca, 0x0b, 0x27, 0x5c, 0x63, 0xe9, 0x7c, 0x95, 0x95, 0x8f,
+	0xce, 0xca, 0x75, 0xb2, 0x7b, 0x3d, 0xf2, 0x2c, 0x8f, 0x45, 0x3e, 0xef, 0x4b, 0xd9, 0x79, 0xd8,
+	0x97, 0x18, 0x10, 0x80, 0xd9, 0xe5, 0x76, 0xb7, 0xb5, 0x57, 0x8b, 0x89, 0x3f, 0xd7, 0x62, 0x57,
+	0xe3, 0xf5, 0x22, 0x23, 0x0f, 0x60, 0xee, 0xb6, 0x37, 0xa8, 0x1a, 0xb7, 0xc8, 0x7d, 0xc2, 0xe0,
+	0x65, 0xb3, 0x93, 0x8b, 0x29, 0xfb, 0x02, 0x05, 0x0f, 0xe7, 0xe3, 0xbb, 0xd4, 0x0b, 0x93, 0x0f,
+	0x84, 0xa1, 0x30, 0x57, 0x46, 0x1e, 0x28, 0xd6, 0x85, 0x84, 0xc1, 0xc3, 0x78, 0xc1, 0x40, 0xb5,
+	0x01, 0xc6, 0x4a, 0x80, 0xee, 0x62, 0xab, 0xbd, 0x50, 0x31, 0x5b, 0xc9, 0x3d, 0x3b, 0xc5, 0xec,
+	0xab, 0x67, 0xde, 0xa1, 0xb1, 0xf8, 0x9f, 0x67, 0x3c, 0xfb, 0x96, 0x03, 0x78, 0x6d, 0xd1, 0xdc,
+	0x6d, 0x6b, 0x24, 0x1c, 0x1e, 0xc7, 0xed, 0x4d, 0xde, 0x90, 0x17, 0x63, 0x8e, 0xa5, 0xcf, 0xb9,
+	0x7c, 0xf9, 0xbb, 0xb4, 0xd5, 0x6c, 0xe2, 0x7b, 0x46, 0x83, 0xff, 0xd0, 0x33, 0xfd, 0x84, 0xf1,
+	0x9e, 0xfd, 0x92, 0xb0, 0x09, 0x79, 0xdb, 0x79, 0xba, 0x11, 0x2d, 0x39, 0x3d, 0xa0, 0x27, 0xa7,
+	0x97, 0x4f, 0x47, 0xd0, 0x50, 0x7b, 0x9e, 0xc4, 0xf6, 0xc5, 0x43, 0x5a, 0xe7, 0xc1, 0xd1, 0xea,
+	0xcf, 0xb3, 0x80, 0xbd, 0xf9, 0x19, 0x00, 0x00, 0xff, 0xff, 0xd6, 0xa3, 0x5f, 0x12, 0xc2, 0x04,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -305,8 +523,14 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type PayServiceClient interface {
+	// 创建支付记录
 	CreatePayRecord(ctx context.Context, in *PayRecordCreateReq, opts ...grpc.CallOption) (*PayRecordCreateResp, error)
+	// 查询支付记录
 	SelectPayRecord(ctx context.Context, in *PayRecordSelectReq, opts ...grpc.CallOption) (*PayRecordSelectResp, error)
+	// 退款
+	RefundPay(ctx context.Context, in *RefundReq, opts ...grpc.CallOption) (*RefundResp, error)
+	// 关单
+	ReversePay(ctx context.Context, in *ReverseReq, opts ...grpc.CallOption) (*RefundResp, error)
 }
 
 type payServiceClient struct {
@@ -335,10 +559,34 @@ func (c *payServiceClient) SelectPayRecord(ctx context.Context, in *PayRecordSel
 	return out, nil
 }
 
+func (c *payServiceClient) RefundPay(ctx context.Context, in *RefundReq, opts ...grpc.CallOption) (*RefundResp, error) {
+	out := new(RefundResp)
+	err := c.cc.Invoke(ctx, "/rpc.proto.PayService/RefundPay", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *payServiceClient) ReversePay(ctx context.Context, in *ReverseReq, opts ...grpc.CallOption) (*RefundResp, error) {
+	out := new(RefundResp)
+	err := c.cc.Invoke(ctx, "/rpc.proto.PayService/ReversePay", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PayServiceServer is the server API for PayService service.
 type PayServiceServer interface {
+	// 创建支付记录
 	CreatePayRecord(context.Context, *PayRecordCreateReq) (*PayRecordCreateResp, error)
+	// 查询支付记录
 	SelectPayRecord(context.Context, *PayRecordSelectReq) (*PayRecordSelectResp, error)
+	// 退款
+	RefundPay(context.Context, *RefundReq) (*RefundResp, error)
+	// 关单
+	ReversePay(context.Context, *ReverseReq) (*RefundResp, error)
 }
 
 // UnimplementedPayServiceServer can be embedded to have forward compatible implementations.
@@ -350,6 +598,12 @@ func (*UnimplementedPayServiceServer) CreatePayRecord(ctx context.Context, req *
 }
 func (*UnimplementedPayServiceServer) SelectPayRecord(ctx context.Context, req *PayRecordSelectReq) (*PayRecordSelectResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SelectPayRecord not implemented")
+}
+func (*UnimplementedPayServiceServer) RefundPay(ctx context.Context, req *RefundReq) (*RefundResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefundPay not implemented")
+}
+func (*UnimplementedPayServiceServer) ReversePay(ctx context.Context, req *ReverseReq) (*RefundResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReversePay not implemented")
 }
 
 func RegisterPayServiceServer(s *grpc.Server, srv PayServiceServer) {
@@ -392,6 +646,42 @@ func _PayService_SelectPayRecord_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PayService_RefundPay_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefundReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PayServiceServer).RefundPay(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/rpc.proto.PayService/RefundPay",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PayServiceServer).RefundPay(ctx, req.(*RefundReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PayService_ReversePay_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReverseReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PayServiceServer).ReversePay(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/rpc.proto.PayService/ReversePay",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PayServiceServer).ReversePay(ctx, req.(*ReverseReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _PayService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "rpc.proto.PayService",
 	HandlerType: (*PayServiceServer)(nil),
@@ -403,6 +693,14 @@ var _PayService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SelectPayRecord",
 			Handler:    _PayService_SelectPayRecord_Handler,
+		},
+		{
+			MethodName: "RefundPay",
+			Handler:    _PayService_RefundPay_Handler,
+		},
+		{
+			MethodName: "ReversePay",
+			Handler:    _PayService_ReversePay_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

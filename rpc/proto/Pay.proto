@@ -4,8 +4,14 @@ package rpc.proto;
 
 // 定义服务
 service PayService {
+  // 创建支付记录
   rpc CreatePayRecord (PayRecordCreateReq) returns (PayRecordCreateResp) {}
+  // 查询支付记录
   rpc SelectPayRecord (PayRecordSelectReq) returns (PayRecordSelectResp) {}
+  // 退款
+  rpc RefundPay(RefundReq) returns(RefundResp){}
+  // 关单
+  rpc ReversePay(ReverseReq) returns(RefundResp){}
 }
 
 message PayRecordCreateReq {
@@ -32,4 +38,30 @@ message PayRecordSelectResp{
   string  payAmount = 4;
   string payMethod = 5;
   string appPayId = 6;
+
+  enum PayStatus{
+    finish = 0;
+    cancel = 1;
+    timeout = 2;
+    refund = 3;
+  }
+  PayStatus payStatus = 7;
+}
+
+message RefundReq{
+  string appId = 1;
+  int64 userId = 2;
+  int64 orderId = 3;
+  string refundAmount = 4;
+}
+
+message RefundResp{
+  string refundId = 4;
+}
+
+message ReverseReq{
+  string appId = 1;
+  int64 userId = 2;
+  int64 orderId = 3;
+  string refundAmount = 4;
 }
