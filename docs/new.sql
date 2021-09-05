@@ -1,7 +1,6 @@
 create table pay_account(
    id bigint comment '自增主键' primary key auto_increment,
    app_id varchar(200) not null comment '',
-   amount decimal(10,2) not null comment '账户金额',
    status varchar(2) not null comment '账户状态',
    update_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间',
    create_time timestamp NOT NULL comment '创建时间'
