@@ -30,8 +30,8 @@ func (wx *WxPayment) PayOrder(record model.PayRecord, account model.PayAccount, 
 			Total: &amount,
 		},
 	}
-	_, _, _ = wxPayService.Prepay(context, request)
-	return ""
+	resp, _, _ := wxPayService.Prepay(context, request)
+	return *resp.PrepayId
 }
 
 type AliPayment struct {

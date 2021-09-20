@@ -16,6 +16,14 @@ type PayServer struct {
 	Server *xgrpc.Server
 }
 
+func (PayServer PayServer) RefundPay(ctx context.Context, req *rpc_proto.RefundReq) (*rpc_proto.RefundResp, error) {
+	panic("implement me")
+}
+
+func (PayServer PayServer) ReversePay(ctx context.Context, req *rpc_proto.ReverseReq) (*rpc_proto.RefundResp, error) {
+	panic("implement me")
+}
+
 func (PayServer PayServer) CreatePayRecord(context context.Context, request *rpc_proto.PayRecordCreateReq) (*rpc_proto.PayRecordCreateResp, error) {
 	payAccount, err := payAccountService.SelectAccount(request.AppId)
 	if err != nil {
@@ -33,7 +41,7 @@ func (PayServer PayServer) CreatePayRecord(context context.Context, request *rpc
 	}
 	reqNo, err := payService.InsertPayOrder(payRecord)
 	payment := service.NewCashContext(payRecord.PayMethod)
-	payment.Strategy.PayOrder(payRecord, payAccount)
+	payment.Strategy.PayOrder(payRecord, payAccount, context)
 	return &rpc_proto.PayRecordCreateResp{
 		SeqNo: reqNo,
 	}, err

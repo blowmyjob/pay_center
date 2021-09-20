@@ -1,9 +1,14 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"github.com/douyu/jupiter"
-	//compound_registry "github.com/douyu/jupiter/pkg/registry/compound"
-	//"github.com/douyu/jupiter/pkg/registry/etcdv3"
+	compound_registry "github.com/douyu/jupiter/pkg/registry/compound"
+	"github.com/douyu/jupiter/pkg/registry/etcdv3"
+	"github.com/wechatpay-apiv3/wechatpay-go/core/notify"
+	"github.com/wechatpay-apiv3/wechatpay-go/services/payments"
+
 	"github.com/douyu/jupiter/pkg/server/xgin"
 	"github.com/douyu/jupiter/pkg/server/xgrpc"
 	"github.com/douyu/jupiter/pkg/xlog"
@@ -18,9 +23,9 @@ import (
 func main() {
 	eng := NewEngine()
 	config.GVA_DB = initConfig.GormMysql("test")
-	//eng.SetRegistry(compound_registry.New(
-	//	etcdv3.StdConfig("wh").Build(),
-	//))
+	eng.SetRegistry(compound_registry.New(
+		etcdv3.StdConfig("wh").Build(),
+	))
 	if err := eng.Run(); err != nil {
 		xlog.Panic(err.Error())
 	}
@@ -48,6 +53,19 @@ func (eng *Engine) serveHTTP() error {
 	server.GET("/hello", func(ctx *gin.Context) {
 		ctx.JSON(200, "Hello Gin")
 	})
+	//微信支付回调
+	server.GET("/wxPay/call", func(ctx *gin.Context) {
+		context := context.Background()
+		handler := new(notify.Handler)
+		transaction := new(payments.Transaction)
+		notifyReq, err := handler.ParseNotifyRequest(context, ctx.Request, transaction)
+		if err != nil {
+
+		}
+		fmt.Println(notifyReq.Summary)
+		fmt.Println(transaction.OutTradeNo)
+	})
+
 	return eng.Serve(server)
 }
 
