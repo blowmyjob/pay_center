@@ -21,6 +21,7 @@ message PayRecordCreateReq {
   float payAmount = 4;
   string payMethod = 5;
   string appPayId = 6;
+  string payChannel = 7;
 }
 
 message PayRecordCreateResp {

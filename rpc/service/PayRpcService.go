@@ -10,12 +10,20 @@ import (
 )
 
 var payService = new(service.PayService)
+var payAccountService = new(service.PayAccountService)
 
 type PayServer struct {
 	Server *xgrpc.Server
 }
 
 func (PayServer PayServer) CreatePayRecord(context context.Context, request *rpc_proto.PayRecordCreateReq) (*rpc_proto.PayRecordCreateResp, error) {
+	payAccount, err := payAccountService.SelectAccount(request.AppId)
+	if err != nil {
+		return nil, err
+	}
+	if payAccount.Status == "0" {
+		return nil, err
+	}
 	payRecord := model.PayRecord{
 		AppId:     request.AppId,
 		ProductId: request.ProductId,
@@ -24,7 +32,8 @@ func (PayServer PayServer) CreatePayRecord(context context.Context, request *rpc
 		PayMethod: request.PayMethod,
 	}
 	reqNo, err := payService.InsertPayOrder(payRecord)
-	//todo 支付渠道网关补充
+	payment := service.NewCashContext(payRecord.PayMethod)
+	payment.Strategy.PayOrder(payRecord, payAccount)
 	return &rpc_proto.PayRecordCreateResp{
 		SeqNo: reqNo,
 	}, err
