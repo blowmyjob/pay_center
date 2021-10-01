@@ -6,5 +6,5 @@ import (
 )
 
 func initMq(name string) {
-	config.GVA_MQ = rocketmq.StdProducerConfig(name).Build()
+	config.GVA_MQ_PRODUCER = rocketmq.StdProducerConfig(name).Build()
 }

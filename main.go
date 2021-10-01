@@ -59,7 +59,7 @@ func (eng *Engine) serveHTTP() error {
 		handler := new(notify.Handler)
 		transaction := new(payments.Transaction)
 		notifyReq, err := handler.ParseNotifyRequest(context, ctx.Request, transaction)
-		if err != nil {
+		if err != nil || notifyReq == nil {
 
 		}
 		fmt.Println(notifyReq.Summary)

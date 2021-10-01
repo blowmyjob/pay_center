@@ -5,6 +5,7 @@ import (
 	"github.com/douyu/jupiter/pkg/server/xgrpc"
 	"github.com/shopspring/decimal"
 	"pay_center/model"
+	"pay_center/mq"
 	rpc_proto "pay_center/rpc/proto"
 	"pay_center/service"
 )
@@ -41,6 +42,7 @@ func (PayServer PayServer) CreatePayRecord(context context.Context, request *rpc
 	}
 	reqNo, err := payService.InsertPayOrder(payRecord)
 	payment := service.NewCashContext(payRecord.PayMethod)
+	mq.SendMsg(payRecord, "")
 	payment.Strategy.PayOrder(payRecord, payAccount, context)
 	return &rpc_proto.PayRecordCreateResp{
 		SeqNo: reqNo,
