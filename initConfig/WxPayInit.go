@@ -6,7 +6,6 @@ import (
 	"github.com/wechatpay-apiv3/wechatpay-go/core"
 	"github.com/wechatpay-apiv3/wechatpay-go/core/option"
 	"github.com/wechatpay-apiv3/wechatpay-go/utils"
-	"pay_center/config"
 )
 
 func initWxPay() {
@@ -27,9 +26,8 @@ func initWxPay() {
 	opts := []core.ClientOption{
 		option.WithWechatPayAutoAuthCipher(mchID, mchCertificateSerialNumber, mchPrivateKey, mchAPIv3Key),
 	}
-	client, err := core.NewClient(ctx, opts...)
+	_, err = core.NewClient(ctx, opts...)
 	if err != nil {
 		xlog.Fatalf("new wechat pay client err:%s", err)
 	}
-	config.GVA_WX_CLIENT = client
 }

@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/douyu/jupiter"
-	compound_registry "github.com/douyu/jupiter/pkg/registry/compound"
-	"github.com/douyu/jupiter/pkg/registry/etcdv3"
 	"github.com/wechatpay-apiv3/wechatpay-go/core/notify"
 	"github.com/wechatpay-apiv3/wechatpay-go/services/payments"
 
@@ -22,10 +20,11 @@ import (
 
 func main() {
 	eng := NewEngine()
+	xlog.Info("pay_center start success.....")
 	config.GVA_DB = initConfig.GormMysql("test")
-	eng.SetRegistry(compound_registry.New(
-		etcdv3.StdConfig("wh").Build(),
-	))
+	//eng.SetRegistry(compound_registry.New(
+	//	etcdv3.StdConfig("wh").Build(),
+	//))
 	if err := eng.Run(); err != nil {
 		xlog.Panic(err.Error())
 	}

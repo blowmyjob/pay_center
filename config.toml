@@ -13,3 +13,9 @@
    connectTimeout = "1s"
    endpoints=["127.0.0.1:2379"]
    secure = false
+[jupiter.logger.default]
+   debug = true         # 是否在命令行输出
+   enableConsole = true # 是否按命令行格式输出
+   dir = "."            # 日志路径
+   async = true         # 默认异步采集日志
+   level = "info"       # 调整日志级别，可以动态修改日志

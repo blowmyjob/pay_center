@@ -14,6 +14,6 @@ func SendMsg(msg interface{}, topic string) {
 	if err != nil {
 
 	}
-	_, _ = config.GVA_MQ_PRODUCER.SendSync(context.Background(),
+	_ = config.GVA_MQ_PRODUCER.SendOneWay(context.Background(),
 		primitive.NewMessage(topic, buf.Bytes()))
 }
