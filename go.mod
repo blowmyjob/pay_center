@@ -3,7 +3,6 @@ module pay_center
 go 1.15
 
 require (
-	github.com/apache/rocketmq-client-go/v2 v2.0.0
 	github.com/douyu/jupiter v0.2.7
 	github.com/gin-gonic/gin v1.7.0
 	github.com/golang/protobuf v1.4.2

@@ -19,3 +19,7 @@
    dir = "."            # 日志路径
    async = true         # 默认异步采集日志
    level = "info"       # 调整日志级别，可以动态修改日志
+[jupiter.server.redis.cluster]
+   addrs =["ip:port","ip:port","ip:port"]
+   password = "xxxxxxxx"
+

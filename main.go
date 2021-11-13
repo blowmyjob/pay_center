@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/douyu/jupiter"
+	"github.com/douyu/jupiter/pkg/client/redis"
 	"github.com/wechatpay-apiv3/wechatpay-go/core/notify"
 	"github.com/wechatpay-apiv3/wechatpay-go/services/payments"
 
@@ -75,4 +76,10 @@ func (eng *Engine) serveGRPC() error {
 		Server: server,
 	})
 	return eng.Serve(server)
+}
+
+func (eng *Engine) startRedis() (err error) {
+	redisStub := redis.StdRedisClusterConfig("redis").Build()
+	config.REDIS_CLIENT = redisStub
+	return
 }
