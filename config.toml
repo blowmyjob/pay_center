@@ -19,7 +19,11 @@
    dir = "."            # 日志路径
    async = true         # 默认异步采集日志
    level = "info"       # 调整日志级别，可以动态修改日志
-[jupiter.server.redis.cluster]
-   addrs =["ip:port","ip:port","ip:port"]
-   password = "xxxxxxxx"
-
+[jupiter.etcdv3.myetcd]
+   endpoints = []
+   connectTimeout = "10s"
+[jupiter.client.etcdserver]
+   address = "etcd:///main"
+   balancerName = "round_robin" # 默认值
+   block =  false # 默认值
+   dialTimeout = "2s" # 默认值
