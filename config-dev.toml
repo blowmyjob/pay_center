@@ -1,0 +1,15 @@
+[mysql_config]
+  username = ""
+  password = ""
+  host = ""
+  port = 3306
+  Dbname = ""
+  timeout = "10s"
+
+[redis_config]
+  addr = ""
+  password = ""
+
+[mongo-config]
+  addr = ""
+  poolNum = 10
